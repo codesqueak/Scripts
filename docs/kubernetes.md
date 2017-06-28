@@ -57,6 +57,14 @@ Once complete (it may take a few minutes), run this next command to verify stora
 systemctl status docker-storage-setup.service
 ```
 
+## Possible Security Issue
+
+As the moment, cluster creation may fail due to SELinux restrictions.  A workaround at the moment is to generate a policy to allow access for the problem area.  **DO NOT DO THIS IN PRODUCTION**. Investigate further.
+```bash
+sudo ausearch -c 'cp' --raw | audit2allow -M my-cp
+sudo semodule -i my-cp.pp
+```
+
 ## Create a Cluster
 
 Use [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/) to do an initial cluster install. This may take several minutes to complete.
@@ -104,6 +112,13 @@ Now you have a working cluster, try running this test application:
 ```bash
 kubectl apply -f "https://github.com/microservices-demo/microservices-demo/blob/master/deploy/kubernetes/complete-demo.yaml?raw=true"
 ```
+
+Once all containers are shown as **Running**, use
+```bash
+kubectl -n sock-shop get svc front-end
+```
+To identify the application address. Open a browser and check the application is working correctly.
+
 
 ## Tear Down
 
