@@ -33,6 +33,17 @@ sudo pvcreate /dev/sdb
 sudo vgextend <VG Name> /dev/sdb
 
 ```
+## Configure Firewall
+
+To run sucessfully, access to various ports is required. To configure, run this:
+```bash
+sudo firewall-cmd --zone=public --add-port=6443/tcp --permanent
+sudo fireall-cmd --zone=public --add-port=9898/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=10250/tcp --permanent
+sudo firewall-cmd --reload
+
+```
+
 ## Install Docker and Kubernetes
 
 Open a terminal, sudo, and run this:
