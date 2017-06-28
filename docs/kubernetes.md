@@ -19,14 +19,14 @@ To check the present status use
 ```bash
 sudo vgdisplay
 ```
-Look for the **VG Name** which you will require later and **FREE PE / size** which should be a minimum of 2G.
-If storage is available, move on to the next step, else continue here.
+Look for the **VG Name** which you will require later and **FREE PE / size** which should be a minimum of 2G (Recommend at least 10G for the example at the end of this document). 
+If storage is available, move on to the next step, else continue here to add more.
 
 The simplest way to add storage is to identify unused space using
 ```bash
 sudo lsblk
 ```
-On a VM, to obtain extra space is to add another disk. For this example, I have added a new device labelled **/dev/sdb**. To use
+On a VM, a fast way to obtain extra space is to add another disk. For this example, I have added a new device labelled **/dev/sdb**. To use
 this new space we have to add it to the physical volume manager and then extend the Volme Group (Identified as **VG Name** earlier).
 ```bash
 sudo pvcreate /dev/sdb
@@ -128,7 +128,10 @@ Once all containers are shown as **Running**, use
 ```bash
 kubectl -n sock-shop get svc front-end
 ```
-To identify the application address. Open a browser and check the application is working correctly.
+To identify the application address (CLUSTER-IP)
+
+
+Open a browser on the host machine and check the application is working correctly.
 
 
 ## Tear Down
