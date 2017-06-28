@@ -11,7 +11,7 @@ hostnamectl set-hostname kubemaster
 
 ## Storage for Docker
 
-Storage under Dcoker is a big subject.  This is a basic method to get you working
+Storage under Docker is a big subject!  This is a basic method to get you working. **DO NOT DO THIS IN PRODUCTION**
 
 To function, Docker requires at minimum 2G of free space, which in this instance is drawn from a defined **Volume Group**
 
@@ -59,11 +59,11 @@ systemctl status docker-storage-setup.service
 
 ## Possible Security Issue
 
-As the moment, cluster creation may fail due to SELinux restrictions.  A workaround at the moment is to generate a policy to allow access for the problem area.  **DO NOT DO THIS IN PRODUCTION**. Investigate further.
-```bash
-sudo ausearch -c 'cp' --raw | audit2allow -M my-cp
-sudo semodule -i my-cp.pp
-```
+As the moment, cluster creation may fail due to SELinux restrictions.  A workaround is to set permissive mode.  **DO NOT DO THIS IN PRODUCTION**. Investigate further.
+
+Open /etc/selinux/config and set SELINUX=permissive
+
+See [this](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security-Enhanced_Linux/sect-Security-Enhanced_Linux-Enabling_and_Disabling_SELinux-Disabling_SELinux.html)
 
 ## Create a Cluster
 
