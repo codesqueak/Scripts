@@ -80,7 +80,7 @@ Since we only have the master at this stage, we need to the Kubernetes it can sc
 ```bash
 kubectl taint nodes --all node-role.kubernetes.io/master-
 ```
-If you now run the following command, you should see all the Kubernetes relatedservices running:
+If you now run the following command, you should see all the Kubernetes related services running:
 ```bash
 kubectl get pods --all-namespaces
 ```
@@ -96,6 +96,26 @@ kube-system   kube-proxy-hw6lg                     1/1       Running   0        
 kube-system   kube-scheduler-kubemaster            1/1       Running   0          4m
 
 ```
+
+## Run a Test Application
+
+Now you have a working cluster, try running this test application:
+
+```bash
+kubectl apply -f "https://github.com/microservices-demo/microservices-demo/blob/master/deploy/kubernetes/complete-demo.yaml?raw=true"
+```
+
+## Tear Down
+
+If you need to remove everything installed by **kubeadm init**, run
+```bash
+kubectl drain kubemaster --delete-local-data --force --ignore-daemonsets
+kubectl delete node kubemaster
+sudo kubeadm reset
+```
+
+
+
 
 
 
