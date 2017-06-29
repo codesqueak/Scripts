@@ -38,7 +38,7 @@ sudo vgextend <VG Name> /dev/sdb
 To run sucessfully, access to various ports is required. To configure, run this:
 ```bash
 sudo firewall-cmd --zone=public --add-port=6443/tcp --permanent
-sudo fireall-cmd --zone=public --add-port=9898/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=9898/tcp --permanent
 sudo firewall-cmd --zone=public --add-port=10250/tcp --permanent
 sudo firewall-cmd --reload
 
@@ -46,7 +46,7 @@ sudo firewall-cmd --reload
 
 ## Install Docker and Kubernetes
 
-Open a terminal, sudo, and run this:
+Open a terminal, sudo -i, and run this:
 ```bash
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -75,6 +75,8 @@ As the moment, cluster creation may fail due to SELinux restrictions.  A workaro
 Open /etc/selinux/config and set SELINUX=permissive
 
 See [this](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security-Enhanced_Linux/sect-Security-Enhanced_Linux-Enabling_and_Disabling_SELinux-Disabling_SELinux.html)
+
+You will need to reboot to make this take effect
 
 ## Create a Cluster
 
@@ -106,13 +108,12 @@ kubectl get pods --all-namespaces
 Giving something like:
 ```
 NAMESPACE     NAME                                 READY     STATUS    RESTARTS   AGE
-kube-system   etcd-kubemaster                      1/1       Running   0          4m
-kube-system   kube-apiserver-kubemaster            1/1       Running   0          4m
-kube-system   kube-controller-manager-kubemaster   1/1       Running   0          4m
-kube-system   kube-dns-692378583-tg7p3             2/3       Running   3          9m
-kube-system   kube-flannel-ds-8qs0t                2/2       Running   0          4m
-kube-system   kube-proxy-hw6lg                     1/1       Running   0          9m
-kube-system   kube-scheduler-kubemaster            1/1       Running   0          4m
+kube-system   kube-apiserver-kubemaster            1/1       Running   0          13s
+kube-system   kube-controller-manager-kubemaster   1/1       Running   0          21s
+kube-system   kube-dns-692378583-rvxtl             0/3       Pending   0          1m
+kube-system   kube-flannel-ds-88w87                2/2       Running   0          17s
+kube-system   kube-proxy-cbwln                     1/1       Running   0          1m
+kube-system   kube-scheduler-kubemaster            1/1       Running   0          20s
 
 ```
 
