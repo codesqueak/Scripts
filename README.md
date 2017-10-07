@@ -8,6 +8,8 @@
 
 [How to install Kibana in Centos 7 using ansible](docs/kibana.md)
 
-[How to install Oracle Java JDK in Centos 7 using ansible](docs/java.md)
+[How to install Oracle Java JDK 8 in Centos 7 using ansible](docs/java.md)
+
+[Install script for Oracle Java JDK 9 in Centos 7 using ansible](scripts/java9.yml)
 
 
