@@ -80,9 +80,9 @@ Create a file *java.yml* and containing the following:
 
 Now execute the ansible script with:
 
-*ansible-playbook -b -K java.yml*
+*ansible-playbook -b -K -k java.yml*
 
-You will be promted for the account password. 
+You will be promted for the account password and sudo password. 
 
 This will:
 
