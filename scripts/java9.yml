@@ -1,0 +1,58 @@
+---
+- hosts: boxen
+  become: true
+  vars:
+    # This is only for release 144. Need to change per release
+    jdk_archive: jdk-9_linux-x64_bin.tar.gz
+    jdk_local_dir: jdk-9
+    jdk_version: 9+181
+    jdk_path_key: 090f390dda5b47b9b721c7dfaa008135
+    # Constant from here on ...
+    download_folder: /opt/oracle
+    bin_dir: /usr/bin
+    java_name: "{{ download_folder }}/{{ jdk_local_dir }}"
+    java_archive: "{{ download_folder }}/{{ jdk_archive }}"
+    jdk_tarball_url: "http://download.oracle.com/otn-pub/java/jdk/{{ jdk_version }}/{{ jdk_archive }}"
+
+  tasks:
+  - name: Create Directory structure
+    command: mkdir -p {{download_folder}}
+  - name: Create dir part II
+    command: mkdir -p {{java_name}}
+
+  - name: Download Java
+    get_url: url={{ jdk_tarball_url }}  dest={{ java_archive }} headers="Cookie:' gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'" validate_certs=no owner=root group=root mode=744
+
+  - name: Unpack archive
+    action: shell tar -xzvf {{java_archive}} -C {{download_folder}}
+
+  - name: Fix ownership
+    file: state=directory path={{java_name}} owner=root group=root recurse=yes
+
+  - name: Make Java available for system by updating alternatives
+    command: "{{ item }}"
+    with_items:
+    - alternatives --install /usr/bin/java java {{ java_name }}/bin/java 9999
+    - alternatives --install /usr/bin/javac javac {{ java_name }}/bin/javac 9999
+    - alternatives --set java {{ java_name }}/bin/java
+    - alternatives --set javac {{ java_name }}/bin/javac
+    - alternatives --install /usr/bin/jar jar {{ java_name }}/bin/jar 9999
+    # Hack. No idea why we have to do this or the --install doesn't work
+    - rm -f /usr/bin/jar
+    - rm -f /var/lib/alternatives/jar
+    - alternatives --install /usr/bin/jar jar {{ java_name }}/bin/jar 9999
+    - alternatives --set jar {{ java_name }}/bin/jar
+
+  # Copy /etc/profile.d/oracle_jdk.sh with content
+  - copy:
+      content: |
+                #!/bin/bash
+                export JDK_HOME={{ java_name }}
+                export JAVA_HOME={{ java_name }}
+                export JRE_HOME={{ java_name }}/jre
+                export PATH=$PATH:{{ java_name }}/bin:{{ java_name }}/jre/bin
+      dest: /etc/profile.d/oracle_jdk.sh
+
+  # Make sure permissions are correct
+  - name: Make executable
+    file: path=/etc/profile.d/oracle_jdk.sh owner=root group=root mode=0644 state=file recurse=no
